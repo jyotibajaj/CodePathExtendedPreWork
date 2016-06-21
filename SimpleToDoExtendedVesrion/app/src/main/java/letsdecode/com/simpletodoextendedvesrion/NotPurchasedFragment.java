@@ -1,19 +1,20 @@
 package letsdecode.com.simpletodoextendedvesrion;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -29,10 +30,11 @@ public class NotPurchasedFragment extends Fragment {
     private static final String TAG = NotPurchasedFragment.class.getSimpleName();
     public static final String ITEM = "SELECTED_ITEM_VALUE";
     private OnFragmentInteractionListener mListener;
+    private int savedPositionOfEditedItem;
 
-    private List<String> items = new ArrayList<>();
+//    private List<String> items = new ArrayList<>();
     private ListView listView;
-    private ArrayAdapter<String> itemsAdapter;
+    ArrayList<ListViewItem> listItems = new ArrayList<>();
     private Button addButton;
 
 
@@ -92,7 +94,6 @@ public class NotPurchasedFragment extends Fragment {
         SQLiteDataAdapter sqLiteDataAdapterNotPurchased = new SQLiteDataAdapter(getActivity().getApplicationContext());
         // data model
          ArrayList<Item> itemList = sqLiteDataAdapterNotPurchased.getToDoItemData();
-        ArrayList<ListViewItem> listItems = new ArrayList<>();
         listItems.add(new ListViewItem(TypeClass.TIME_VIEW, new Time(new Date())));
         for (Item i: itemList) {
             listItems.add(new ListViewItem(TypeClass.ITEM_DETAIL_VIEW, i));
@@ -100,7 +101,23 @@ public class NotPurchasedFragment extends Fragment {
 
         ListViewAdapter listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listview_layout,listItems);
         listView.setAdapter(listViewAdapter);
+
+        //setting onClickListener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //String selectedItemFromArrayList = listItems.get(position);
+                savedPositionOfEditedItem = position;
+                Log.d(TAG, "setupListViewShortListener. onItemClick: @@@@@@@" + position);
+                FragmentTransaction fragmentTransaction3 = getFragmentManager().beginTransaction();
+                fragmentTransaction3.replace(R.id.fragment_container, AddItemFragment.newInstance(null, true)).commit();
+
+            }
+        });
+
+
     }
+
 
 
 

@@ -129,6 +129,11 @@ public class SQLiteDataAdapter {
         return itemArrayList;
     }
 
+
+    public static Item getItemByID(int id){
+        
+
+    }
     // inner class so that its private variable can only be accessible to outer class
     static class SQLiteDataBaseHelper extends SQLiteOpenHelper {
         /*

@@ -1,43 +1,106 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddItemFragment">
 
-    <EditText
-        android:layout_width="180dp"
+    <TextView
+        android:id="@+id/textView_taskName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Task Name" />
+
+    <EditText
         android:id="@+id/editText_taskName"
-        android:layout_marginTop="80dp"
-        android:layout_gravity="center_horizontal"
-        android:hint="Enter Item name"
-        />
-
-    <EditText
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText_addQuantity"
-        android:layout_marginTop="140dp"
-        android:layout_gravity="center_horizontal"
-        android:hint="Enter quantity"
-        />
+        android:layout_alignBaseline="@+id/textView_taskName"
+        android:layout_toRightOf="@+id/textView_taskName" />
+
+
+    <TextView
+        android:id="@+id/textView_dueDate"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_taskName"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="DueDate" />
+
+    <EditText
+        android:id="@+id/editText_dueDate"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView_dueDate"
+        android:layout_toRightOf="@+id/textView_dueDate" />
+
+
+    <TextView
+        android:id="@+id/textView_priority"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_dueDate"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Priority" />
+
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/textView_priority">
+
+        <Button
+            android:id="@+id/button_low"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="Low"
+            />
+
+        <Button
+            android:id="@+id/button_med"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="Medium" />
+
+        <Button
+            android:id="@+id/button_high"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="high" />
+
+        <Button
+            android:id="@+id/button_urgent"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="urgent" />
+
+        </RadioGroup>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Add"
         android:id="@+id/button_addItem"
-        android:layout_marginTop="200dp"/>
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="List"
-        android:id="@+id/button_displayNotPurchasedList"
-        android:layout_marginTop="270dp"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        />
+        android:layout_marginTop="240dp"
+        android:text="Add" />
+
+    <Button
+        android:id="@+id/button_displayNotPurchasedList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="290dp"
+        android:text="List" />
 
 
-</FrameLayout>
+</RelativeLayout>

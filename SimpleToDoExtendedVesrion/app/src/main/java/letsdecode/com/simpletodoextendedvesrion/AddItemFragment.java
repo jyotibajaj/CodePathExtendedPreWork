@@ -23,13 +23,14 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class AddItemFragment extends Fragment {
-    private Button addButton;
+    private Button addButton, lowButton, mediumButton, highButton, urgentButton;
     public static final String EDIT_KEY = "edit";
     public static final String ITEM_ID = "ID";
     private EditText taskNameEdit, dueDateEdit;
     SQLiteDataAdapter sqLiteDataAdapter;
     private boolean editMode = false;
     private String id = null;
+    String priority = "";
 
 
     private OnFragmentInteractionListener mListener;
@@ -38,14 +39,7 @@ public class AddItemFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddItemFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static AddItemFragment newInstance(String id, boolean edit) {
         AddItemFragment fragment = new AddItemFragment();
@@ -67,14 +61,11 @@ public class AddItemFragment extends Fragment {
         sqLiteDataAdapter = new SQLiteDataAdapter(getActivity().getApplicationContext());
         Bundle bundle = getArguments();
         editMode = (Boolean) bundle.get(EDIT_KEY);
-        if (editMode == false) {
-
-            //Add mode
-        } else {
+        if (editMode != false) {
             //edit mode
             id = bundle.getString(ITEM_ID);
-//            Item item = sqLiteDataAdapter.getItemByID(id);
-//            initPageWith (item);
+            Item item = sqLiteDataAdapter.getItemByID(id);
+            initPageWith (item);
         }
     }
 
@@ -100,23 +91,64 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //button reference
+
+        //button references
+        lowButton = (Button) view.findViewById(R.id.button_low);
+        mediumButton = (Button) view.findViewById(R.id.button_med);
+        highButton = (Button) view.findViewById(R.id.button_high);
+        urgentButton = (Button) view.findViewById(R.id.button_urgent);
+
         addButton = (Button) view.findViewById(R.id.button_addItem);
+
+        //click listeners
+        lowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = lowButton.getText().toString();
+
+
+            }
+        });
+
+        mediumButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = mediumButton.getText().toString();
+
+            }
+        });
+
+        highButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = highButton.getText().toString();
+
+            }
+        });
+
+        urgentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = urgentButton.getText().toString();
+
+            }
+        });
+
 
         //edit texts reference
         taskNameEdit = (EditText) view.findViewById(R.id.editText_taskName);
-        dueDateEdit = (EditText) view.findViewById(R.id.editText_addQuantity);
-        if (editMode) {
-            addButton.setText("Update");
-        }
+        dueDateEdit = (EditText) view.findViewById(R.id.editText_dueDate);
+//        if (editMode) {
+//            addButton.setText("Update");
+//        }
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (editMode) {
-
-//                    sqLiteDataAdapter.updateItemData();
-                } else {
+//                if (editMode) {
+//
+////                    sqLiteDataAdapter.updateItemData();
+//                } else {
                     String itemNameFromEdit = taskNameEdit.getText().toString();
                     Date date = new Date();
 //                if (dueDateFromEdit != null) {
@@ -126,13 +158,13 @@ public class AddItemFragment extends Fragment {
                         LogMessage.logInfo(getActivity().getApplicationContext(), "fields are empty");
 
                     } else {
-                        sqLiteDataAdapter.insertItemData(itemNameFromEdit, date, "low");
+                        sqLiteDataAdapter.insertItemData(itemNameFromEdit, date, priority);
                         FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
                         fragmentTransaction2.replace(R.id.fragment_container, new NotPurchasedFragment()).commit();
                     }
                 }
 
-            }
+//            }
         });
 
 
