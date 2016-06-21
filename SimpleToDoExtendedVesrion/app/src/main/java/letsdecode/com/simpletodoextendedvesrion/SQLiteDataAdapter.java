@@ -130,10 +130,45 @@ public class SQLiteDataAdapter {
     }
 
 
-    public static Item getItemByID(int id){
-        
+    public static Item getItemByID(String id){
+        SQLiteDatabase dbObject;
+        Item itemObject = null;
+        dbObject = sqLiteDataBaseHelper.getWritableDatabase();
+        String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, SQLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
+        /* public Cursor query( String table, String[] columns,
+        String selection, String[] selectionArgs, String groupBy,
+                String having, String orderBy) {
+                */
+        /* return cursor type object and this cursor object contains the subset of table containing the result.
+        cursor is used to retrieve data and we use query method of SQliteDatabase
+         */
+        Cursor cursor = dbObject.query(sqLiteDataBaseHelper.TABLE_ITEM, columns, "item_id=?", new String[]{id}, null, null, null);
+        ArrayList<Item> itemArrayList = new ArrayList<Item>();
+        // when reach end of the statement moveNxt will return false and execution of loop stops.
+        //cursor steps up row wise, it complete one row and then moves to next.
+        while (cursor.moveToNext()) {
+            int uidIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.UID);
+            int taskIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.TASK_NAME);
+            int timeIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.DUE_DATE);
+            int priorityIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.PRIORITY);
+            int statusIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.STATUS);
+            int uid = cursor.getInt(uidIndex);
+            String itemName = cursor.getString(taskIndex);
+            String time = cursor.getString(timeIndex);
+
+            String priority = cursor.getString(priorityIndex);
+            String status = cursor.getString(statusIndex);
+            itemObject = (new Item(itemName, Long.parseLong(time), priority, status, uid));
+
+        }
+        return itemObject;
+
 
     }
+
+
+
+
     // inner class so that its private variable can only be accessible to outer class
     static class SQLiteDataBaseHelper extends SQLiteOpenHelper {
         /*

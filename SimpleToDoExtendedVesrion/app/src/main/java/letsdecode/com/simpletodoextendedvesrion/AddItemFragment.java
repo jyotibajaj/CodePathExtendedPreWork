@@ -69,6 +69,15 @@ public class AddItemFragment extends Fragment {
         }
     }
 
+    private void initPageWith(Item item){
+        taskNameEdit.setText(item.getItemName());
+        dueDateEdit.setText(new Date(item.getTime()).toString());
+        //priority = item.getPriority();
+
+
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,7 +106,6 @@ public class AddItemFragment extends Fragment {
         mediumButton = (Button) view.findViewById(R.id.button_med);
         highButton = (Button) view.findViewById(R.id.button_high);
         urgentButton = (Button) view.findViewById(R.id.button_urgent);
-
         addButton = (Button) view.findViewById(R.id.button_addItem);
 
         //click listeners
