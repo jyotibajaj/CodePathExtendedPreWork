@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,6 @@ public class AddItemFragment extends Fragment {
     private String idItem = null;
     String priority = "low";
     Item item = null;
-    private String buttonType = null;
 
     long itemTime = new Date().getTime();
 
@@ -76,13 +77,34 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         sqLiteDataAdapter = new SQLiteDataAdapter(getActivity().getApplicationContext());
         Bundle bundle = getArguments();
 
         editMode = (Boolean) bundle.get(EDIT_KEY);
+        if (editMode) {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Edit Task");
+        } else {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Add Task");
+        }
+        setHasOptionsMenu(true);
 
     }
 
+        @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    getActivity().onBackPressed();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+
+        }
     private void initPageWith(Item item) {
         taskNameEdit.setText(item.getItemName());
         dueDateEdit.setText(item.getTime());

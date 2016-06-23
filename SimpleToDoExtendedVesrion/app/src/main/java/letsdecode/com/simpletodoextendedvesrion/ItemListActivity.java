@@ -1,13 +1,10 @@
 package letsdecode.com.simpletodoextendedvesrion;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 
 
 public class ItemListActivity extends AppCompatActivity implements ToDoListFragment.OnFragmentInteractionListener, AddItemFragment.OnFragmentInteractionListener {
@@ -20,8 +17,8 @@ public class ItemListActivity extends AppCompatActivity implements ToDoListFragm
         //Set Action bar icon and show that
         getSupportActionBar().setIcon(R.drawable.check);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setTitle("Edit Task");
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         final FragmentManager fragmentManager = getFragmentManager();
@@ -31,22 +28,29 @@ public class ItemListActivity extends AppCompatActivity implements ToDoListFragm
             fragmentTransaction.add(R.id.fragment_container, toDoFragment);
             fragmentTransaction.commit();
         }
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask((Activity) getApplicationContext());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
+    protected void onPause() {
+        super.onPause();
     }
 
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+    }
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
