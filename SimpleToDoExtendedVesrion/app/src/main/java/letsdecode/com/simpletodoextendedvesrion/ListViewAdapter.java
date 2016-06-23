@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by aashi on 15/06/16.
@@ -75,18 +74,12 @@ public class ListViewAdapter extends ArrayAdapter<ListViewItem> {
             case TypeClass.ITEM_DETAIL_VIEW:
                 Item itemObject = (Item) listItem.getObject();
                 textView.setText(itemObject.getItemName() + ":" + itemObject.getStatus() +  ":" +
-                        itemObject.getPriority() + ":" + new Date(itemObject.getTime()).toString());
+                        itemObject.getPriority() + ":" + itemObject.getTime());
                 break;
         }
         return view;
     }
 
-    private static class ViewHolderListItem {
-        TextView itemNameView;
-    }
 
-    private static class ViewHolderTime {
-        TextView timeView;
-    }
 }
 

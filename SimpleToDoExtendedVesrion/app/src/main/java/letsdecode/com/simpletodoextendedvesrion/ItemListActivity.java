@@ -1,19 +1,23 @@
 package letsdecode.com.simpletodoextendedvesrion;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 
-public class ItemListActivity extends Activity implements ToDoListFragment.OnFragmentInteractionListener, DoneFragment.OnFragmentInteractionListener, AddItemFragment.OnFragmentInteractionListener {
+public class ItemListActivity extends AppCompatActivity implements ToDoListFragment.OnFragmentInteractionListener, DoneFragment.OnFragmentInteractionListener, AddItemFragment.OnFragmentInteractionListener {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        //Set Action bar icon and show that
+        getSupportActionBar().setIcon(R.drawable.check);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         final FragmentManager fragmentManager = getFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -8,10 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class SQLiteDataAdapter {
@@ -36,23 +33,32 @@ public class SQLiteDataAdapter {
 
 
     //method to insert data(item name and quantity) from input box to data box
-    public static void updateItemData(String id, String name, String date, String priority) {
+    public static void updateItemData(int id, String name, String date, String priority) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLiteDataBaseHelper.TASK_NAME, name);
         contentValues.put(SQLiteDataBaseHelper.DUE_DATE, date);
         contentValues.put(SQLiteDataBaseHelper.PRIORITY, priority);
-        contentValues.put(SQLiteDataBaseHelper.STATUS, "done");
+//        contentValues.put(SQLiteDataBaseHelper.STATUS, "done");
         SQLiteDatabase dbObject;
         dbObject = sqLiteDataBaseHelper.getWritableDatabase();
-        dbObject.update(SQLiteDataBaseHelper.TABLE_ITEM, contentValues, "item_id=?", new String[]{id});
+        dbObject.update(SQLiteDataBaseHelper.TABLE_ITEM, contentValues, "item_id=?", new String[]{"" + id});
+    }
+
+    //method to insert data(item name and quantity) from input box to data box
+    public static boolean deleteItemData(int id) {
+        String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, SQLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
+        SQLiteDatabase dbObject;
+        dbObject = sqLiteDataBaseHelper.getWritableDatabase();
+       // long uid = dbObject.delete(SQLiteDataBaseHelper.TABLE_ITEM, columns, "item_id=?", new String[]{"" + id});
+        return dbObject.delete(SQLiteDataBaseHelper.TABLE_ITEM, SQLiteDataBaseHelper.UID + "=" + id, null) > 0;
     }
 
 
     //method to insert data(item name and quantity) from input box to data box
-    public static long insertItemData(String itemName, Date date, String priority) {
+    public static long insertItemData(String itemName, String date, String priority) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLiteDataBaseHelper.TASK_NAME, itemName);
-        contentValues.put(SQLiteDataBaseHelper.DUE_DATE, date.getTime());
+        contentValues.put(SQLiteDataBaseHelper.DUE_DATE, date);
         contentValues.put(SQLiteDataBaseHelper.PRIORITY, priority);
         contentValues.put(SQLiteDataBaseHelper.STATUS, "todo");
         SQLiteDatabase dbObject;
@@ -89,7 +95,7 @@ public class SQLiteDataAdapter {
 
             String priority = cursor.getString(priorityIndex);
             String status = cursor.getString(statusIndex);
-            itemArrayList.add(new Item(itemName, Long.parseLong(time), priority, status, uid));
+            itemArrayList.add(new Item(itemName, time, priority, status, uid));
 
         }
         return itemArrayList;
@@ -124,7 +130,7 @@ public class SQLiteDataAdapter {
 
             String priority = cursor.getString(priorityIndex);
             String status = cursor.getString(statusIndex);
-            itemArrayList.add(new Item(itemName, Long.parseLong(time), priority, status, uid));
+            itemArrayList.add(new Item(itemName, time, priority, status, uid));
         }
         return itemArrayList;
     }
@@ -158,7 +164,7 @@ public class SQLiteDataAdapter {
 
             String priority = cursor.getString(priorityIndex);
             String status = cursor.getString(statusIndex);
-            itemObject = (new Item(itemName, Long.parseLong(time), priority, status, uid));
+            itemObject = (new Item(itemName, time, priority, status, uid));
 
         }
         return itemObject;
@@ -222,42 +228,42 @@ public class SQLiteDataAdapter {
 //            init();
         }
 
-        public void init() {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date date = new Date();
-            String currentDate = dateFormat.format(date);
-
-
-            //Test Queries
-            insertItemData("item 1", date, "low");
-            insertItemData("item 2", date, "high");
-            insertItemData("item 3", date, "urgent");
-            insertItemData("item 4", date, "medium");
-
-
-            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items Start =========");
-            ArrayList<Item> todo = getToDoItemData();
-            print(todo);
-            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items End =========");
-
-            updateItemData("1", "item 1 done", "" + date.getTime(), "low");
-            updateItemData("2", "item 2 done", "" + date.getTime(), "urgent");
-            updateItemData("3", "item 3 done", "" + date.getTime(), "medium");
-
-            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items after done  Start =========");
-            todo = getToDoItemData();
-            print(todo);
-            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items after done End =========");
-
-
-            Log.d(SQLiteDataAdapter.class.getSimpleName(), " Done Items Start =========");
-            ArrayList<Item> done = getDoneItemData();
-            print(done);
-            Log.d(SQLiteDataAdapter.class.getSimpleName(), " Done Items End =========");
-
-
-        }
-
+//        public void init() {
+//            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//            Date date = new Date();
+//            String currentDate = dateFormat.format(date);
+//
+//
+//            //Test Queries
+//            insertItemData("item 1", date, "low");
+//            insertItemData("item 2", date, "high");
+//            insertItemData("item 3", date, "urgent");
+//            insertItemData("item 4", date, "medium");
+//
+//
+//            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items Start =========");
+//            ArrayList<Item> todo = getToDoItemData();
+//            print(todo);
+//            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items End =========");
+//
+//            updateItemData("1", "item 1 done", "" + date.getTime(), "low");
+//            updateItemData("2", "item 2 done", "" + date.getTime(), "urgent");
+//            updateItemData("3", "item 3 done", "" + date.getTime(), "medium");
+//
+//            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items after done  Start =========");
+//            todo = getToDoItemData();
+//            print(todo);
+//            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items after done End =========");
+//
+//
+//            Log.d(SQLiteDataAdapter.class.getSimpleName(), " Done Items Start =========");
+//            ArrayList<Item> done = getDoneItemData();
+//            print(done);
+//            Log.d(SQLiteDataAdapter.class.getSimpleName(), " Done Items End =========");
+//
+//
+//        }
+//
 
         // Upgrading database
         @Override

@@ -1,17 +1,16 @@
 package letsdecode.com.simpletodoextendedvesrion;
 
 
-
 public class Item {
 
     private String itemName;
     private String status;
 
-    public long getTime() {
+    public String getTime() {
         return time;
     }
 
-    private long time;
+    private String time;
     private String priority;
     private final int id;
 
@@ -19,7 +18,7 @@ public class Item {
         return priority;
     }
 
-    public Item(String itemName, long time, String priority, String status, int id){
+    public Item(String itemName, String time, String priority, String status, int id) {
         this.itemName = itemName;
         this.status = status;
         this.time = time;
@@ -59,10 +58,6 @@ public class Item {
     public int getId() {
         return id;
     }
-
-
-
-
 
 
 }

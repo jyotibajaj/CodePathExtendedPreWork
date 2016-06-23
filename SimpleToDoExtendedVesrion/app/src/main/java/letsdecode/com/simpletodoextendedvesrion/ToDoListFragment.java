@@ -94,7 +94,7 @@ public class ToDoListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        listItems.clear();
         //button reference
         addItemImageButton = (ImageButton)view.findViewById(R.id.imageButton_add);
 
@@ -102,7 +102,7 @@ public class ToDoListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction3 = getFragmentManager().beginTransaction();
-                fragmentTransaction3.replace(R.id.fragment_container, AddItemFragment.newInstance(0, false)).commit();
+                fragmentTransaction3.replace(R.id.fragment_container, AddItemFragment.newInstance(0, false)).addToBackStack(null).commit();
 
             }
         });

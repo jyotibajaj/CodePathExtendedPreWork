@@ -1,15 +1,19 @@
 package letsdecode.com.simpletodoextendedvesrion;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.util.Date;
 
@@ -23,14 +27,21 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class AddItemFragment extends Fragment {
-    private Button addButton, lowButton, mediumButton, highButton, urgentButton;
+    private Button lowButton, mediumButton, highButton, urgentButton;
+    private ImageButton trashButton, addButton;
+
+
     public static final String EDIT_KEY = "edit";
     public static final String ITEM_ID = "ID";
     private EditText taskNameEdit, dueDateEdit;
     SQLiteDataAdapter sqLiteDataAdapter;
     private boolean editMode = false;
-    private String id = null;
-    String priority = "";
+    private String idItem = null;
+    String priority = "low";
+    Item item = null;
+    private String buttonType = null;
+
+    long itemTime = new Date().getTime();
 
 
     private OnFragmentInteractionListener mListener;
@@ -41,16 +52,23 @@ public class AddItemFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static AddItemFragment newInstance(String id, boolean edit) {
+    public static AddItemFragment newInstance(int id, boolean edit) {
         AddItemFragment fragment = new AddItemFragment();
         Bundle args = new Bundle();
         if (edit) {
-            if (id == null && id.trim().isEmpty()) {
+            if (id == 0) {
                 new IllegalArgumentException("Id not provide for edit mode ");
             }
-            args.putString(ITEM_ID, id);
+
+            args.putInt(ITEM_ID, id);
             args.putBoolean(EDIT_KEY, Boolean.TRUE);
+
+        } else {
+            args.putBoolean(EDIT_KEY, Boolean.FALSE);
+
         }
+
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,21 +78,26 @@ public class AddItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sqLiteDataAdapter = new SQLiteDataAdapter(getActivity().getApplicationContext());
         Bundle bundle = getArguments();
+
         editMode = (Boolean) bundle.get(EDIT_KEY);
-        if (editMode != false) {
-            //edit mode
-            id = bundle.getString(ITEM_ID);
-            Item item = sqLiteDataAdapter.getItemByID(id);
-            initPageWith (item);
-        }
     }
 
-    private void initPageWith(Item item){
+    private void initPageWith(Item item) {
         taskNameEdit.setText(item.getItemName());
-        dueDateEdit.setText(new Date(item.getTime()).toString());
-        //priority = item.getPriority();
+        dueDateEdit.setText(item.getTime());
+        priority = item.getPriority();
+    }
 
-
+    private void setPriorityState(String priority) {
+        if (priority.equalsIgnoreCase("low")) {
+            lowButton.setPressed(true);
+        } else if (priority.equalsIgnoreCase("medium")) {
+            mediumButton.setPressed(true);
+        } else if (priority.equalsIgnoreCase("high")) {
+            highButton.setPressed(true);
+        } else {
+            urgentButton.setPressed(true);
+        }
 
     }
 
@@ -106,76 +129,197 @@ public class AddItemFragment extends Fragment {
         mediumButton = (Button) view.findViewById(R.id.button_med);
         highButton = (Button) view.findViewById(R.id.button_high);
         urgentButton = (Button) view.findViewById(R.id.button_urgent);
-        addButton = (Button) view.findViewById(R.id.button_addItem);
-
-        //click listeners
-        lowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                priority = lowButton.getText().toString();
-
-
-            }
-        });
-
-        mediumButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                priority = mediumButton.getText().toString();
-
-            }
-        });
-
-        highButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                priority = highButton.getText().toString();
-
-            }
-        });
-
-        urgentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                priority = urgentButton.getText().toString();
-
-            }
-        });
-
-
+        addButton = (ImageButton) view.findViewById(R.id.button_addItem);
+        trashButton = (ImageButton) view.findViewById(R.id.imageButton_trash);
+        trashButton.setVisibility(View.INVISIBLE);
         //edit texts reference
         taskNameEdit = (EditText) view.findViewById(R.id.editText_taskName);
         dueDateEdit = (EditText) view.findViewById(R.id.editText_dueDate);
-//        if (editMode) {
-//            addButton.setText("Update");
+        if (editMode != false) {
+            //edit mode
+            trashButton.setVisibility(View.VISIBLE);
+            int idToDelete = getArguments().getInt(ITEM_ID, -1);
+            if (idToDelete != -1) {
+                idItem = "" + idToDelete;
+                item = SQLiteDataAdapter.getItemByID(idItem);
+                initPageWith(item);
+                priority = item.getPriority();
+                setPriorityState(priority);
+            }
+        } else {
+            setPriorityState(priority);
+        }
+
+
+//        if (editMode == false) {
+//            Date defaultTime = newCalendar.getTime();
+//            itemTime = defaultTime.getTime();
+//            dueDateEdit.setText(defaultTime.toString());
+//        } else {
+//            Date defaultTime = new Date(item.getTime());
+//            itemTime = defaultTime.getTime();
+//            dueDateEdit.setText(defaultTime.toString());
 //        }
+
+        //click listener for trash buttons
+        trashButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getActivity());
+
+//                // set title
+//                alertDialogBuilder.setTitle("Your Title");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Are you sure you want to delete?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked
+                                int id1 = Integer.parseInt(idItem);
+                                SQLiteDataAdapter.deleteItemData(id1);
+                                FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
+                                fragmentTransaction2.replace(R.id.fragment_container, new ToDoListFragment()).commit();
+
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+            }
+        });
+
+
+        lowButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                reset();
+                priority = "low";
+                lowButton.setPressed(true);
+                return true;
+            }
+        });
+
+        mediumButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                reset();
+                priority = "medium";
+                mediumButton.setPressed(true);
+                return true;
+            }
+        });
+
+        highButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                reset();
+                priority = "high";
+                highButton.setPressed(true);
+                return true;
+            }
+        });
+
+
+        urgentButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                reset();
+                urgentButton.setPressed(true);
+                priority = "urgent";
+
+                return true;
+            }
+        });
+
+
+        if (editMode) {
+//            addButton.setText("Update");
+        }
+
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-//                if (editMode) {
-//
-////                    sqLiteDataAdapter.updateItemData();
-//                } else {
+                if (editMode) {
+                    int id = item.getId();
+                    String itemName = taskNameEdit.getText().toString();
+                    String time = dueDateEdit.getText().toString();
+                    SQLiteDataAdapter.updateItemData(id, itemName, time, priority);
+                    FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
+                    fragmentTransaction2.replace(R.id.fragment_container, new ToDoListFragment()).commit();
+                } else {
                     String itemNameFromEdit = taskNameEdit.getText().toString();
-                    Date date = new Date();
-//                if (dueDateFromEdit != null) {
-//                    dueDateInteger = Integer.parseInt(dueDateFromEdit);
-//                }
+                    String date = dueDateEdit.getText().toString();
                     if (itemNameFromEdit.isEmpty()) {
                         LogMessage.logInfo(getActivity().getApplicationContext(), "fields are empty");
-
                     } else {
-                        sqLiteDataAdapter.insertItemData(itemNameFromEdit, date, priority);
+                        SQLiteDataAdapter.insertItemData(itemNameFromEdit, date, priority);
                         FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
-                        fragmentTransaction2.replace(R.id.fragment_container, new NotPurchasedFragment()).commit();
+                        fragmentTransaction2.replace(R.id.fragment_container, new ToDoListFragment()).commit();
                     }
                 }
-
-//            }
+            }
         });
 
 
+
+    //
+
+}
+
+
+
+
+    private void buttonClicked(View v) {
+        int id = v.getId();
+        switch (id) {
+            case 1:
+                id = R.id.button_low;
+                priority = lowButton.getText().toString();
+                break;
+
+            case 2:
+                id = R.id.button_med;
+                priority = mediumButton.getText().toString();
+                break;
+
+            case 3:
+                id = R.id.button_high;
+                priority = highButton.getText().toString();
+                break;
+
+            case 5:
+                id = R.id.button_urgent;
+                priority = urgentButton.getText().toString();
+                break;
+
+
+        }
+
+
+    }
+
+
+    private void reset() {
+        lowButton.setPressed(false);
+        mediumButton.setPressed(false);
+        highButton.setPressed(false);
+        urgentButton.setPressed(false);
     }
 
     @Override
@@ -200,7 +344,7 @@ public class AddItemFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
