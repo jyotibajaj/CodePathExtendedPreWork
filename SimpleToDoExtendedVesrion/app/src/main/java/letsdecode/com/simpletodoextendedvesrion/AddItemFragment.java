@@ -2,7 +2,6 @@ package letsdecode.com.simpletodoextendedvesrion;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -14,9 +13,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -35,7 +36,8 @@ public class AddItemFragment extends Fragment {
 
     public static final String EDIT_KEY = "edit";
     public static final String ITEM_ID = "ID";
-    private EditText taskNameEdit, dueDateEdit;
+    private EditText taskNameEdit;
+    private DatePicker datePicker;
     SQLiteDataAdapter sqLiteDataAdapter;
     private boolean editMode = false;
     private String idItem = null;
@@ -56,20 +58,16 @@ public class AddItemFragment extends Fragment {
     public static AddItemFragment newInstance(int id, boolean edit) {
         AddItemFragment fragment = new AddItemFragment();
         Bundle args = new Bundle();
+
         if (edit) {
             if (id == 0) {
                 new IllegalArgumentException("Id not provide for edit mode ");
             }
-
             args.putInt(ITEM_ID, id);
             args.putBoolean(EDIT_KEY, Boolean.TRUE);
-
         } else {
             args.putBoolean(EDIT_KEY, Boolean.FALSE);
-
         }
-
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -107,7 +105,9 @@ public class AddItemFragment extends Fragment {
         }
     private void initPageWith(Item item) {
         taskNameEdit.setText(item.getItemName());
-        dueDateEdit.setText(item.getTime());
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date(Long.valueOf(item.getTime())));
+        datePicker.init(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), null);
         priority = item.getPriority();
     }
 
@@ -157,7 +157,8 @@ public class AddItemFragment extends Fragment {
         trashButton.setVisibility(View.INVISIBLE);
         //edit texts reference
         taskNameEdit = (EditText) view.findViewById(R.id.editText_taskName);
-        dueDateEdit = (EditText) view.findViewById(R.id.editText_dueDate);
+        datePicker = (DatePicker) view.findViewById(R.id.date_picker);
+
         if (editMode != false) {
             //edit mode
             trashButton.setVisibility(View.VISIBLE);
@@ -173,17 +174,6 @@ public class AddItemFragment extends Fragment {
             setPriorityState(priority);
         }
 
-
-//        if (editMode == false) {
-//            Date defaultTime = newCalendar.getTime();
-//            itemTime = defaultTime.getTime();
-//            dueDateEdit.setText(defaultTime.toString());
-//        } else {
-//            Date defaultTime = new Date(item.getTime());
-//            itemTime = defaultTime.getTime();
-//            dueDateEdit.setText(defaultTime.toString());
-//        }
-
         //click listener for trash buttons
         trashButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,10 +181,6 @@ public class AddItemFragment extends Fragment {
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         getActivity());
-
-//                // set title
-//                alertDialogBuilder.setTitle("Your Title");
-
                 // set dialog message
                 alertDialogBuilder
                         .setMessage("Are you sure you want to delete?")
@@ -204,8 +190,7 @@ public class AddItemFragment extends Fragment {
                                 // if this button is clicked
                                 int id1 = Integer.parseInt(idItem);
                                 SQLiteDataAdapter.deleteItemData(id1);
-                                FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
-                                fragmentTransaction2.replace(R.id.fragment_container, new ToDoListFragment()).commit();
+                                getActivity().onBackPressed();
 
                             }
                         })
@@ -269,43 +254,33 @@ public class AddItemFragment extends Fragment {
         });
 
 
-        if (editMode) {
-//            addButton.setText("Update");
-        }
-
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, datePicker.getYear());
+                cal.set(Calendar.MONTH, datePicker.getMonth());
+                cal.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                long time = cal.getTime().getTime();
                 if (editMode) {
                     int id = item.getId();
                     String itemName = taskNameEdit.getText().toString();
-                    String time = dueDateEdit.getText().toString();
-                    SQLiteDataAdapter.updateItemData(id, itemName, time, priority);
-                    FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
-                    fragmentTransaction2.replace(R.id.fragment_container, new ToDoListFragment()).commit();
+                    SQLiteDataAdapter.updateItemData(id, itemName, "" + time, priority);
+                    getActivity().onBackPressed();
                 } else {
                     String itemNameFromEdit = taskNameEdit.getText().toString();
-                    String date = dueDateEdit.getText().toString();
                     if (itemNameFromEdit.isEmpty()) {
                         LogMessage.logInfo(getActivity().getApplicationContext(), "fields are empty");
                     } else {
-                        SQLiteDataAdapter.insertItemData(itemNameFromEdit, date, priority);
-                        FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
-                        fragmentTransaction2.replace(R.id.fragment_container, new ToDoListFragment()).commit();
+                        SQLiteDataAdapter.insertItemData(itemNameFromEdit, "" + time, priority);
+                        getActivity().onBackPressed();
+
                     }
                 }
             }
         });
 
-
-
-    //
-
-}
-
-
+    }
 
 
     private void buttonClicked(View v) {

@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddItemFragment">
+
     <ImageButton
+        android:id="@+id/imageButton_trash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-       android:layout_alignParentTop="true"
-        android:src="@drawable/trash_35"
-        android:id="@+id/imageButton_trash"
-        />
+        android:layout_alignParentTop="true"
+        android:src="@drawable/trash_35" />
 
 
     <TextView
@@ -28,29 +28,19 @@
         android:layout_alignBaseline="@+id/textView_taskName"
         android:layout_toRightOf="@+id/textView_taskName" />
 
-
-    <TextView
-        android:id="@+id/textView_dueDate"
-        android:layout_width="75dp"
+    <DatePicker
+        android:id="@+id/date_picker"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_taskName"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:text="DueDate" />
-
-    <EditText
-        android:id="@+id/editText_dueDate"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_dueDate"
-        android:layout_toRightOf="@+id/textView_dueDate" />
-
+        android:layout_below="@+id/editText_taskName"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"></DatePicker>
 
     <TextView
         android:id="@+id/textView_priority"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_dueDate"
+        android:layout_below="@+id/date_picker"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:text="Priority" />
@@ -105,13 +95,12 @@
         android:id="@+id/button_addItem"
         android:layout_width="80dp"
         android:layout_height="30dp"
+        android:layout_below="@+id/textView_priority"
 
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_send_black_24dp"
-        android:layout_marginTop="240dp"
         android:text="submit" />
-
 
 
 </RelativeLayout>

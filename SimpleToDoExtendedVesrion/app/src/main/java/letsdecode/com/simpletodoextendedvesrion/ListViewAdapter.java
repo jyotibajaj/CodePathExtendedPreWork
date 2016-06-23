@@ -67,9 +67,9 @@ public class ListViewAdapter extends ArrayAdapter<ListViewItem> {
                 .get(position);
         switch (listItem.getType()) {
             case TypeClass.TIME_VIEW:
-                Time timeObject = (Time) listItem.getObject();
+                String time= (String) listItem.getObject();
 
-                textView.setText("Today");
+                textView.setText(time);
                 break;
             case TypeClass.ITEM_DETAIL_VIEW:
                 Item itemObject = (Item) listItem.getObject();

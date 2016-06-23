@@ -2,6 +2,7 @@ package letsdecode.com.simpletodoextendedvesrion;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.usage.NetworkStats;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import letsdecode.com.simpletodoextendedvesrion.bucket.ItemsBucketing;
 
 
 /**
@@ -110,11 +113,9 @@ public class ToDoListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.listView_notPurchased);
         SQLiteDataAdapter sqLiteDataAdapterNotPurchased = new SQLiteDataAdapter(getActivity().getApplicationContext());
         // data model
-         ArrayList<Item> itemList = sqLiteDataAdapterNotPurchased.getToDoItemData();
-        listItems.add(new ListViewItem(TypeClass.TIME_VIEW, new Time(new Date())));
-        for (Item i: itemList) {
-            listItems.add(new ListViewItem(TypeClass.ITEM_DETAIL_VIEW, i));
-        }
+        ArrayList<Item> itemList = sqLiteDataAdapterNotPurchased.getToDoItemData();
+        ItemsBucketing itemsBucketing = new ItemsBucketing();
+        listItems = itemsBucketing.createBuckets(itemList);
 
         ListViewAdapter listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listview_layout,listItems);
         listView.setAdapter(listViewAdapter);
@@ -141,13 +142,7 @@ public class ToDoListFragment extends Fragment {
 
             }
         });
-
-
-
     }
-
-
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -163,6 +158,5 @@ public class ToDoListFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }
 
