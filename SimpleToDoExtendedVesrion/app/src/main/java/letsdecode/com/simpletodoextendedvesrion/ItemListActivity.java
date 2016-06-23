@@ -1,13 +1,16 @@
 package letsdecode.com.simpletodoextendedvesrion;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 
-public class ItemListActivity extends AppCompatActivity implements ToDoListFragment.OnFragmentInteractionListener, DoneFragment.OnFragmentInteractionListener, AddItemFragment.OnFragmentInteractionListener {
+public class ItemListActivity extends AppCompatActivity implements ToDoListFragment.OnFragmentInteractionListener, AddItemFragment.OnFragmentInteractionListener {
 
 
     @Override
@@ -18,6 +21,8 @@ public class ItemListActivity extends AppCompatActivity implements ToDoListFragm
         getSupportActionBar().setIcon(R.drawable.check);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         final FragmentManager fragmentManager = getFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -26,45 +31,22 @@ public class ItemListActivity extends AppCompatActivity implements ToDoListFragm
             fragmentTransaction.add(R.id.fragment_container, toDoFragment);
             fragmentTransaction.commit();
         }
-
-
-
-
-
-//        doneButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentTransaction fragmentTransaction2 = getFragmentManager().beginTransaction();
-//                fragmentTransaction2.replace(R.id.fragment_container, new DoneFragment()).commit();
-//
-//            }
-//        });
-
-//        addItemButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentTransaction fragmentTransaction3 = getFragmentManager().beginTransaction();
-//                fragmentTransaction3.replace(R.id.fragment_container, AddItemFragment.newInstance(0, false)).commit();
-//
-//            }
-//        });
     }
 
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-////        if (id == R.id.action_settings) {
-////            return true;
-////        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask((Activity) getApplicationContext());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {

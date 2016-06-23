@@ -80,6 +80,7 @@ public class AddItemFragment extends Fragment {
         Bundle bundle = getArguments();
 
         editMode = (Boolean) bundle.get(EDIT_KEY);
+
     }
 
     private void initPageWith(Item item) {
