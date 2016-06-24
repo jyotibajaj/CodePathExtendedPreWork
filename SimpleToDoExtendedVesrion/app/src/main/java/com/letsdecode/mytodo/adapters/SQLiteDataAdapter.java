@@ -1,4 +1,4 @@
-package letsdecode.com.simpletodoextendedvesrion;
+package com.letsdecode.mytodo.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import com.letsdecode.mytodo.models.TaskDetail;
 
 
 public class SQLiteDataAdapter {
@@ -25,8 +27,8 @@ public class SQLiteDataAdapter {
         sqLiteDataBaseHelper = new SQLiteDataBaseHelper(context);
         this.context = context;
     }
-    static void print(ArrayList<Item> toprint) {
-        for (Item i : toprint) {
+    static void print(ArrayList<TaskDetail> toprint) {
+        for (TaskDetail i : toprint) {
             Log.d(SQLiteDataAdapter.class.getSimpleName(), " item " + i.toString());
         }
     }
@@ -68,7 +70,7 @@ public class SQLiteDataAdapter {
     }
 
 
-    public static ArrayList<Item> getToDoItemData() {
+    public static ArrayList<TaskDetail> getToDoItemData() {
         SQLiteDatabase dbObject;
         dbObject = sqLiteDataBaseHelper.getWritableDatabase();
         String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, SQLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
@@ -80,7 +82,7 @@ public class SQLiteDataAdapter {
         cursor is used to retrieve data and we use query method of SQliteDatabase
          */
         Cursor cursor = dbObject.query(sqLiteDataBaseHelper.TABLE_ITEM, columns, "status=?", new String[]{"todo"}, null, null, null);
-        ArrayList<Item> itemArrayList = new ArrayList<Item>();
+        ArrayList<TaskDetail> itemArrayList = new ArrayList<TaskDetail>();
         // when reach end of the statement moveNxt will return false and execution of loop stops.
         //cursor steps up row wise, it complete one row and then moves to next.
         while (cursor.moveToNext()) {
@@ -95,7 +97,7 @@ public class SQLiteDataAdapter {
 
             String priority = cursor.getString(priorityIndex);
             String status = cursor.getString(statusIndex);
-            itemArrayList.add(new Item(itemName, time, priority, status, uid));
+            itemArrayList.add(new TaskDetail(itemName, time, priority, status, uid));
 
         }
         return itemArrayList;
@@ -103,7 +105,7 @@ public class SQLiteDataAdapter {
 
     }
 
-    public static ArrayList<Item> getDoneItemData() {
+    public static ArrayList<TaskDetail> getDoneItemData() {
         SQLiteDatabase dbObject;
         dbObject = sqLiteDataBaseHelper.getWritableDatabase();
         String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, sqLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
@@ -115,7 +117,7 @@ public class SQLiteDataAdapter {
         cursor is used to retrieve data and we use query method of SQliteDatabase
          */
         Cursor cursor = dbObject.query(sqLiteDataBaseHelper.TABLE_ITEM, columns, "status=?", new String[]{"done"}, null, null, null);
-        ArrayList<Item> itemArrayList = new ArrayList<Item>();
+        ArrayList<TaskDetail> itemArrayList = new ArrayList<TaskDetail>();
         // when reach end of the statement moveNxt will return false and execution of loop stops.
         //cursor steps up row wise, it complete one row and then moves to next.
         while (cursor.moveToNext()) {
@@ -130,15 +132,15 @@ public class SQLiteDataAdapter {
 
             String priority = cursor.getString(priorityIndex);
             String status = cursor.getString(statusIndex);
-            itemArrayList.add(new Item(itemName, time, priority, status, uid));
+            itemArrayList.add(new TaskDetail(itemName, time, priority, status, uid));
         }
         return itemArrayList;
     }
 
 
-    public static Item getItemByID(String id){
+    public static TaskDetail getItemByID(String id){
         SQLiteDatabase dbObject;
-        Item itemObject = null;
+        TaskDetail itemObject = null;
         dbObject = sqLiteDataBaseHelper.getWritableDatabase();
         String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, SQLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
         /* public Cursor query( String table, String[] columns,
@@ -149,7 +151,7 @@ public class SQLiteDataAdapter {
         cursor is used to retrieve data and we use query method of SQliteDatabase
          */
         Cursor cursor = dbObject.query(sqLiteDataBaseHelper.TABLE_ITEM, columns, "item_id=?", new String[]{id}, null, null, null);
-        ArrayList<Item> itemArrayList = new ArrayList<Item>();
+        ArrayList<TaskDetail> itemArrayList = new ArrayList<TaskDetail>();
         // when reach end of the statement moveNxt will return false and execution of loop stops.
         //cursor steps up row wise, it complete one row and then moves to next.
         while (cursor.moveToNext()) {
@@ -164,7 +166,7 @@ public class SQLiteDataAdapter {
 
             String priority = cursor.getString(priorityIndex);
             String status = cursor.getString(statusIndex);
-            itemObject = (new Item(itemName, time, priority, status, uid));
+            itemObject = (new TaskDetail(itemName, time, priority, status, uid));
 
         }
         return itemObject;
@@ -207,7 +209,6 @@ public class SQLiteDataAdapter {
         // constructor
         public SQLiteDataBaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
-            LogMessage.logInfo(context, "Constructor executed");
             this.context = context;
         }
 
@@ -216,11 +217,9 @@ public class SQLiteDataAdapter {
         @Override
         public void onCreate(SQLiteDatabase db) {
             // toast message to get info if onCreate is called
-            LogMessage.logInfo(context, "onCreate executed");
             try {
                 db.execSQL(CREATE_TABLE_ITEM);
             } catch (SQLException e) {
-                LogMessage.logInfo(context, "" + e);
                 Log.d("exception on create", "" + e);
 
 
@@ -242,7 +241,7 @@ public class SQLiteDataAdapter {
 //
 //
 //            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items Start =========");
-//            ArrayList<Item> todo = getToDoItemData();
+//            ArrayList<TaskDetail> todo = getToDoItemData();
 //            print(todo);
 //            Log.d(SQLiteDataAdapter.class.getSimpleName(), " To DO Items End =========");
 //
@@ -257,7 +256,7 @@ public class SQLiteDataAdapter {
 //
 //
 //            Log.d(SQLiteDataAdapter.class.getSimpleName(), " Done Items Start =========");
-//            ArrayList<Item> done = getDoneItemData();
+//            ArrayList<TaskDetail> done = getDoneItemData();
 //            print(done);
 //            Log.d(SQLiteDataAdapter.class.getSimpleName(), " Done Items End =========");
 //
@@ -268,7 +267,6 @@ public class SQLiteDataAdapter {
         // Upgrading database
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            LogMessage.logInfo(context, "onUpgrade executed");
 
             // Drop older table if existed
             try {
@@ -276,7 +274,6 @@ public class SQLiteDataAdapter {
                 // Create tables again
                 onCreate(db);
             } catch (SQLException e) {
-                LogMessage.logInfo(context, "" + e);
             }
 
 

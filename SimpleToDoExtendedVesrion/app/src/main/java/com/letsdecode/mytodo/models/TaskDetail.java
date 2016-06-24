@@ -1,7 +1,7 @@
-package letsdecode.com.simpletodoextendedvesrion;
+package com.letsdecode.mytodo.models;
 
 
-public class Item {
+public class TaskDetail {
 
     private String itemName;
     private String status;
@@ -18,7 +18,7 @@ public class Item {
         return priority;
     }
 
-    public Item(String itemName, String time, String priority, String status, int id) {
+    public TaskDetail(String itemName, String time, String priority, String status, int id) {
         this.itemName = itemName;
         this.status = status;
         this.time = time;
@@ -30,7 +30,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
+        return "TaskDetail{" +
                 "itemName='" + itemName + '\'' +
                 ", status='" + status + '\'' +
                 ", time=" + time +

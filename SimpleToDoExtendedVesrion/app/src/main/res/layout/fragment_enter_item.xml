@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddItemFragment">
+    tools:context="com.letsdecode.mytodo.fragment.AddItemFragment">
 
 
 
@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText_taskName"
         android:layout_toRightOf="@id/textView_due_date"
+        android:layout_marginTop="10dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"></DatePicker>
 
@@ -63,7 +64,7 @@
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/color_change_b"
+            android:background="@drawable/color_selector_priority"
             android:button="@null"
             android:gravity="center"
             android:text="Low" />
@@ -74,7 +75,7 @@
             android:layout_height="25dp"
             android:gravity="center"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/color_change_b"
+            android:background="@drawable/color_selector_priority"
             android:button="@null"
             android:text="Medium" />
 
@@ -83,7 +84,7 @@
             android:layout_width="60dp"
             android:layout_height="25dp"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/color_change_b"
+            android:background="@drawable/color_selector_priority"
             android:gravity="center"
             android:button="@null"
             android:text="High" />
@@ -94,7 +95,7 @@
             android:layout_height="25dp"
             android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:background="@drawable/color_change_b"
+            android:background="@drawable/color_selector_priority"
             android:button="@null"
             android:text="Urgent" />
 

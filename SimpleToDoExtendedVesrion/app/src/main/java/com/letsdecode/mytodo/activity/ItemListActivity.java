@@ -1,10 +1,15 @@
-package letsdecode.com.simpletodoextendedvesrion;
+package com.letsdecode.mytodo.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.letsdecode.mytodo.fragment.AddItemFragment;
+import com.letsdecode.mytodo.fragment.ToDoListFragment;
+
+import letsdecode.com.simpletodoextendedvesrion.R;
 
 
 public class ItemListActivity extends AppCompatActivity implements ToDoListFragment.OnFragmentInteractionListener, AddItemFragment.OnFragmentInteractionListener {

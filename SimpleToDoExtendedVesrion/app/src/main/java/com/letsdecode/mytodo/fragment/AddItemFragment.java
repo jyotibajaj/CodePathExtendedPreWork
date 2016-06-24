@@ -1,4 +1,4 @@
-package letsdecode.com.simpletodoextendedvesrion;
+package com.letsdecode.mytodo.fragment;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -16,8 +16,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.letsdecode.mytodo.adapters.SQLiteDataAdapter;
+
 import java.util.Calendar;
 import java.util.Date;
+
+import com.letsdecode.mytodo.models.TaskDetail;
+import letsdecode.com.simpletodoextendedvesrion.R;
 
 
 /**
@@ -40,7 +45,7 @@ public class AddItemFragment extends Fragment {
     private boolean editMode = false;
     private String idItem = null;
     String priority = "low";
-    Item item = null;
+    TaskDetail item = null;
 
     long itemTime = new Date().getTime();
 
@@ -101,7 +106,7 @@ public class AddItemFragment extends Fragment {
 
     }
 
-    private void initPageWith(Item item) {
+    private void initPageWith(TaskDetail item) {
         taskNameEdit.setText(item.getItemName());
         Calendar now = Calendar.getInstance();
         now.setTime(new Date(Long.valueOf(item.getTime())));
@@ -275,7 +280,7 @@ public class AddItemFragment extends Fragment {
                 } else {
                     String itemNameFromEdit = taskNameEdit.getText().toString();
                     if (itemNameFromEdit.isEmpty()) {
-                        LogMessage.logInfo(getActivity().getApplicationContext(), "fields are empty");
+
                     } else {
                         SQLiteDataAdapter.insertItemData(itemNameFromEdit, "" + time, priority);
                         getActivity().onBackPressed();

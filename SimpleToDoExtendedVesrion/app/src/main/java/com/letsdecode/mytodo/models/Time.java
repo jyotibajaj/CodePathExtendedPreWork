@@ -1,4 +1,4 @@
-package letsdecode.com.simpletodoextendedvesrion;
+package com.letsdecode.mytodo.models;
 
 import java.util.Date;
 

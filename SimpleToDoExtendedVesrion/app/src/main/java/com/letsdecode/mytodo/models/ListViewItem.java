@@ -1,4 +1,4 @@
-package letsdecode.com.simpletodoextendedvesrion;
+package com.letsdecode.mytodo.models;
 
 /**
  * Created by aashi on 20/06/16.

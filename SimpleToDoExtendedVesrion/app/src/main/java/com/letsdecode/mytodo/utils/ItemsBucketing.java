@@ -1,4 +1,8 @@
-package letsdecode.com.simpletodoextendedvesrion.bucket;
+package com.letsdecode.mytodo.utils;
+
+import com.letsdecode.mytodo.models.ListViewItem;
+import com.letsdecode.mytodo.models.TaskDetail;
+import com.letsdecode.mytodo.models.TypeClass;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,13 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
-import letsdecode.com.simpletodoextendedvesrion.Item;
-import letsdecode.com.simpletodoextendedvesrion.ListViewItem;
-import letsdecode.com.simpletodoextendedvesrion.TypeClass;
 
-/**
- * Created by gauravb on 6/22/16.
- */
 public class ItemsBucketing {
     public static final String[] months = {"January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"};
@@ -58,13 +56,13 @@ public class ItemsBucketing {
         }
     }
 
-    public ArrayList<ListViewItem> createBuckets(ArrayList<Item> items) {
+    public ArrayList<ListViewItem> createBuckets(ArrayList<TaskDetail> items) {
         ArrayList<ListViewItem> listViewItem = new ArrayList<>();
         long currentTime = System.currentTimeMillis();
         Calendar now = Calendar.getInstance();
-        HashMap<Keys, ArrayList<Item>> map = new HashMap<>();
+        HashMap<Keys, ArrayList<TaskDetail>> map = new HashMap<>();
         Keys[] values = Keys.values();
-        for (Item i : items) {
+        for (TaskDetail i : items) {
             Keys key = Keys.SOME_DAY;
             Calendar taskTime = Calendar.getInstance();
             Date itemDate = new Date(Long.valueOf(i.getTime()));
@@ -121,11 +119,11 @@ public class ItemsBucketing {
         Collections.sort(keyList);
 
         for (Keys k : values) {
-            ArrayList<Item> list = map.get(k);
+            ArrayList<TaskDetail> list = map.get(k);
             if (list != null) {
                 listViewItem.add(new ListViewItem(TypeClass.TIME_VIEW, k.getDisplayValue()));
                 Collections.sort(list, comparator);
-                for (Item item : list) {
+                for (TaskDetail item : list) {
                     listViewItem.add(new ListViewItem(TypeClass.ITEM_DETAIL_VIEW, item));
                 }
             }
@@ -146,15 +144,15 @@ public class ItemsBucketing {
         }
     }
 
-    private static Comparator<Item> comparator = new Comparator<Item>() {
+    private static Comparator<TaskDetail> comparator = new Comparator<TaskDetail>() {
         @Override
-        public int compare(Item lhs, Item rhs) {
+        public int compare(TaskDetail lhs, TaskDetail rhs) {
             return getPriority(lhs.getPriority()) - getPriority(rhs.getPriority());
         }
     };
 
-    private void put(HashMap<Keys, ArrayList<Item>> map, Keys key, Item i) {
-        ArrayList<Item> list = map.get(key);
+    private void put(HashMap<Keys, ArrayList<TaskDetail>> map, Keys key, TaskDetail i) {
+        ArrayList<TaskDetail> list = map.get(key);
         if (list == null) {
             list = new ArrayList<>();
             map.put(key, list);
