@@ -1,23 +1,25 @@
 package com.letsdecode.mytodo.fragment;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
+import java.text.SimpleDateFormat;
 import com.letsdecode.mytodo.adapters.SQLiteDataAdapter;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,17 +36,22 @@ import letsdecode.com.simpletodoextendedvesrion.R;
  * create an instance of this fragment.
  */
 public class AddItemFragment extends Fragment {
-    private Button lowButton, mediumButton, highButton, urgentButton,trashButton,addButton;
-
+    private RadioButton lowButton, mediumButton, highButton, urgentButton;
+    private View trashButton, addButton;
+    private static SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("EEE, d MMM yyyy");
 
     public static final String EDIT_KEY = "edit";
     public static final String ITEM_ID = "ID";
     private EditText taskNameEdit;
     private DatePicker datePicker;
     SQLiteDataAdapter sqLiteDataAdapter;
+    private TextInputLayout textInputLayout;
+    TextInputLayout date;
     private boolean editMode = false;
     private String idItem = null;
     String priority = "low";
+    EditText editText_duedate;
+    Calendar calendar;
     TaskDetail item = null;
 
     long itemTime = new Date().getTime();
@@ -108,21 +115,24 @@ public class AddItemFragment extends Fragment {
 
     private void initPageWith(TaskDetail item) {
         taskNameEdit.setText(item.getItemName());
-        Calendar now = Calendar.getInstance();
-        now.setTime(new Date(Long.valueOf(item.getTime())));
-        datePicker.init(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), null);
+        calendar = Calendar.getInstance();
+        calendar.setTime(new Date(Long.valueOf(item.getTime())));
+        editText_duedate.setText(simpleDateFormat.format(calendar.getTime()));
+//
+//        datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), null);
         priority = item.getPriority();
     }
 
     private void setPriorityState(String priority) {
         if (priority.equalsIgnoreCase("low")) {
-            lowButton.setPressed(true);
+            lowButton.setChecked(true);
+//            lowButton.setPressed(true);
         } else if (priority.equalsIgnoreCase("medium")) {
-            mediumButton.setPressed(true);
+            mediumButton.setChecked(true);
         } else if (priority.equalsIgnoreCase("high")) {
-            highButton.setPressed(true);
+            highButton.setChecked(true);
         } else {
-            urgentButton.setPressed(true);
+            urgentButton.setChecked(true);
         }
 
     }
@@ -158,16 +168,30 @@ public class AddItemFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //button references
-        lowButton = (Button) view.findViewById(R.id.button_low);
-        mediumButton = (Button) view.findViewById(R.id.button_med);
-        highButton = (Button) view.findViewById(R.id.button_high);
-        urgentButton = (Button) view.findViewById(R.id.button_urgent);
-        addButton = (Button) view.findViewById(R.id.button_addItem);
-        trashButton = (Button) view.findViewById(R.id.button_trash);
+        lowButton = (RadioButton) view.findViewById(R.id.button_low);
+        mediumButton = (RadioButton) view.findViewById(R.id.button_med);
+        highButton = (RadioButton) view.findViewById(R.id.button_high);
+        urgentButton = (RadioButton) view.findViewById(R.id.button_urgent);
+        addButton = view.findViewById(R.id.button_addItem);
+        trashButton = view.findViewById(R.id.button_trash);
         trashButton.setVisibility(View.INVISIBLE);
         //edit texts reference
+
+        textInputLayout = (TextInputLayout) view.findViewById(R.id.textView_taskName);
         taskNameEdit = (EditText) view.findViewById(R.id.editText_taskName);
-        datePicker = (DatePicker) view.findViewById(R.id.date_picker);
+//        datePicker = (DatePicker) view.findViewById(R.id.date_picker);
+        date = (TextInputLayout)view.findViewById(R.id.date);
+        date.setOnClickListener(editDateClickListener);
+        editText_duedate = (EditText) view.findViewById(R.id.editText_duedate);
+        editText_duedate.setOnClickListener(editDateClickListener);
+
+        if (editMode == false) {
+            calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR, 23);
+            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.SECOND, 59);
+            editText_duedate.setText(simpleDateFormat.format(calendar.getTime()));
+        }
 
         if (editMode != false) {
             //edit mode
@@ -226,7 +250,7 @@ public class AddItemFragment extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 reset();
                 priority = "low";
-                lowButton.setPressed(true);
+                lowButton.setChecked(true);
                 return true;
             }
         });
@@ -236,7 +260,7 @@ public class AddItemFragment extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 reset();
                 priority = "medium";
-                mediumButton.setPressed(true);
+                mediumButton.setChecked(true);
                 return true;
             }
         });
@@ -246,7 +270,7 @@ public class AddItemFragment extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 reset();
                 priority = "high";
-                highButton.setPressed(true);
+                highButton.setChecked(true);
                 return true;
             }
         });
@@ -256,9 +280,8 @@ public class AddItemFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 reset();
-                urgentButton.setPressed(true);
                 priority = "urgent";
-
+                urgentButton.setChecked(true);
                 return true;
             }
         });
@@ -267,11 +290,15 @@ public class AddItemFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.YEAR, datePicker.getYear());
-                cal.set(Calendar.MONTH, datePicker.getMonth());
-                cal.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-                long time = cal.getTime().getTime();
+                if (calendar == null) {
+                    date.setError("Enter a valid date");
+                    return;
+                }
+                long time = calendar.getTime().getTime();
+                if (taskNameEdit.getText().toString().trim().isEmpty()) {
+                    textInputLayout.setError("Please enter a task name");
+                    return;
+                }
                 if (editMode) {
                     int id = item.getId();
                     String itemName = taskNameEdit.getText().toString();
@@ -293,11 +320,38 @@ public class AddItemFragment extends Fragment {
     }
 
     private void reset() {
-        lowButton.setPressed(false);
-        mediumButton.setPressed(false);
-        highButton.setPressed(false);
-        urgentButton.setPressed(false);
+//        lowButton.setPressed(false);
+//        mediumButton.setPressed(false);
+//        highButton.setPressed(false);
+//        urgentButton.setPressed(false);
     }
+    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker arg0, int year, int month, int dayOfMonth) {
+            calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            calendar.set(Calendar.HOUR, 23);
+            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.SECOND, 59);
+//            editText_duedate.setText(calendar.getTime().toString());
+            editText_duedate.setText(simpleDateFormat.format(calendar.getTime()));
+        }
+    };
+
+    View.OnClickListener editDateClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            new DatePickerDialog(AddItemFragment.this.getActivity(), myDateListener, year, month, day).show();
+        }
+    };
+
 
     @Override
     public void onAttach(Context context) {
