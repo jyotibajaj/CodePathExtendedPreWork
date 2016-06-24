@@ -8,14 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-
 import com.letsdecode.mytodo.models.TaskDetail;
+
+import java.util.ArrayList;
 
 
 public class SQLiteDataAdapter {
     static SQLiteDataBaseHelper sqLiteDataBaseHelper;
-
 
     /*
      just so we can have a reference of object of inner class, in order to call getWritableDatabase method and get a
@@ -40,7 +39,6 @@ public class SQLiteDataAdapter {
         contentValues.put(SQLiteDataBaseHelper.TASK_NAME, name);
         contentValues.put(SQLiteDataBaseHelper.DUE_DATE, date);
         contentValues.put(SQLiteDataBaseHelper.PRIORITY, priority);
-//        contentValues.put(SQLiteDataBaseHelper.STATUS, "done");
         SQLiteDatabase dbObject;
         dbObject = sqLiteDataBaseHelper.getWritableDatabase();
         dbObject.update(SQLiteDataBaseHelper.TABLE_ITEM, contentValues, "item_id=?", new String[]{"" + id});
@@ -51,7 +49,6 @@ public class SQLiteDataAdapter {
         String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, SQLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
         SQLiteDatabase dbObject;
         dbObject = sqLiteDataBaseHelper.getWritableDatabase();
-       // long uid = dbObject.delete(SQLiteDataBaseHelper.TABLE_ITEM, columns, "item_id=?", new String[]{"" + id});
         return dbObject.delete(SQLiteDataBaseHelper.TABLE_ITEM, SQLiteDataBaseHelper.UID + "=" + id, null) > 0;
     }
 
@@ -105,39 +102,6 @@ public class SQLiteDataAdapter {
 
     }
 
-    public static ArrayList<TaskDetail> getDoneItemData() {
-        SQLiteDatabase dbObject;
-        dbObject = sqLiteDataBaseHelper.getWritableDatabase();
-        String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, sqLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
-        /* public Cursor query(String table, String[] columns,
-        String selection, String[] selectionArgs, String groupBy,
-                String having, String orderBy) {
-                */
-        /* return cursor type object and this cursor object contains the subset of table containing the result.
-        cursor is used to retrieve data and we use query method of SQliteDatabase
-         */
-        Cursor cursor = dbObject.query(sqLiteDataBaseHelper.TABLE_ITEM, columns, "status=?", new String[]{"done"}, null, null, null);
-        ArrayList<TaskDetail> itemArrayList = new ArrayList<TaskDetail>();
-        // when reach end of the statement moveNxt will return false and execution of loop stops.
-        //cursor steps up row wise, it complete one row and then moves to next.
-        while (cursor.moveToNext()) {
-            int uidIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.UID);
-            int taskIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.TASK_NAME);
-            int timeIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.DUE_DATE);
-            int priorityIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.PRIORITY);
-            int statusIndex = cursor.getColumnIndex(sqLiteDataBaseHelper.STATUS);
-            int uid = cursor.getInt(uidIndex);
-            String itemName = cursor.getString(taskIndex);
-            String time = cursor.getString(timeIndex);
-
-            String priority = cursor.getString(priorityIndex);
-            String status = cursor.getString(statusIndex);
-            itemArrayList.add(new TaskDetail(itemName, time, priority, status, uid));
-        }
-        return itemArrayList;
-    }
-
-
     public static TaskDetail getItemByID(String id){
         SQLiteDatabase dbObject;
         TaskDetail itemObject = null;
@@ -181,9 +145,7 @@ public class SQLiteDataAdapter {
     static class SQLiteDataBaseHelper extends SQLiteOpenHelper {
         /*
         This class talks about creating schema eg: database name, table name, columns names etc.
-
          */
-
         private static final int DATABASE_VERSION = 3;
         private static final String DATABASE_NAME = "userInformationDataBase";
 
@@ -227,6 +189,7 @@ public class SQLiteDataAdapter {
 //            init();
         }
 
+        //test cases
 //        public void init() {
 //            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 //            Date date = new Date();

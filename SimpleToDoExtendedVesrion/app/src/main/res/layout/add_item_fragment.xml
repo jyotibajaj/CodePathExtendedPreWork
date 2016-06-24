@@ -16,7 +16,7 @@
             android:id="@+id/editText_taskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Task Name" />
+            android:hint="@string/taskNameHint" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -33,14 +33,12 @@
             android:id="@+id/editText_duedate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
             android:cursorVisible="false"
             android:drawableEnd="@drawable/ic_date_range_black_24dp"
             android:drawableRight="@drawable/ic_date_range_black_24dp"
-            android:hint="Task date"
+            android:focusable="false"
+            android:hint="@string/dueDateHint"
             android:textColor="@android:color/black" />
-
-
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -48,7 +46,7 @@
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date"
-        android:text="Priority" />
+        android:text="@string/priorityText" />
 
 
     <RadioGroup
@@ -66,7 +64,7 @@
             android:buttonTint="@color/colorLow"
             android:colorAccent="@color/colorLow"
             android:gravity="center"
-            android:text="Low" />
+            android:text="@string/lowButtonText" />
 
         <RadioButton
             android:id="@+id/button_med"
@@ -76,7 +74,7 @@
             android:buttonTint="@color/colorMedium"
             android:colorAccent="@color/colorMedium"
             android:gravity="center"
-            android:text="Medium" />
+            android:text="@string/mediumButtonText" />
 
         <RadioButton
             android:id="@+id/button_high"
@@ -85,7 +83,7 @@
             android:layout_marginLeft="10dp"
             android:buttonTint="@color/colorHigh"
             android:gravity="center"
-            android:text="High" />
+            android:text="@string/highButtonText" />
 
         <RadioButton
             android:id="@+id/button_urgent"
@@ -94,7 +92,7 @@
             android:layout_marginLeft="10dp"
             android:buttonTint="@color/colorUrgent"
             android:gravity="center"
-            android:text="Urgent" />
+            android:text="@string/urgentButtonText" />
 
     </RadioGroup>
 
@@ -105,24 +103,21 @@
         android:layout_below="@+id/radiogroup"
         android:layout_marginTop="40dp"
         android:background="@color/colorPrimary"
-        android:text="SUBMIT"
+        android:text="@string/submitButtonText"
         android:textColor="@android:color/white" />
 
 
     <TextView
         android:id="@+id/button_trash"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-
         android:layout_marginBottom="10dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:text="REMOVE"
-        android:textColor="#d96060"
+        android:text="@string/removeButtonText"
+        android:textColor="@color/colorDelete"
         android:textSize="16sp"
         android:textStyle="bold" />
 

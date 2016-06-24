@@ -5,26 +5,22 @@ import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
 import com.letsdecode.mytodo.fragment.AddItemFragment;
 import com.letsdecode.mytodo.fragment.ToDoListFragment;
-
 import letsdecode.com.simpletodoextendedvesrion.R;
 
 
 public class ItemListActivity extends AppCompatActivity implements ToDoListFragment.OnFragmentInteractionListener, AddItemFragment.OnFragmentInteractionListener {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.item_list_activity);
         //Set Action bar icon and show that
         getSupportActionBar().setIcon(R.drawable.check);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-
+        //setting default fragment in a ItemListActivity
         final FragmentManager fragmentManager = getFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         final ToDoListFragment toDoFragment = new ToDoListFragment();
@@ -33,24 +29,6 @@ public class ItemListActivity extends AppCompatActivity implements ToDoListFragm
             fragmentTransaction.commit();
         }
 
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
-
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 
     @Override

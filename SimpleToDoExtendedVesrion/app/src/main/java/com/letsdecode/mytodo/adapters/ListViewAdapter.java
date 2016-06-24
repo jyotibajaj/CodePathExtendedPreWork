@@ -1,6 +1,6 @@
 package com.letsdecode.mytodo.adapters;
 
-import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,28 +18,22 @@ import letsdecode.com.simpletodoextendedvesrion.R;
 
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> {
-    private Context context;
-    ItemClick itemClick;
-
-    public interface ItemClick {
-        void onItemClicked(TaskDetail t);
-    }
-
-
+    private ItemClick itemClick;
     private ArrayList<ListViewItem> listItems;
 
 
+    public interface ItemClick {
+        void onItemClicked(TaskDetail taskDetail);
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
         public TextView itemNameTextView, itemPriority;
         public CardView cardView;
         public TextView time_view;
 
 
         public ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
             super(itemView);
+            //getting reference of views
             cardView = (CardView) itemView.findViewById(R.id.card_view);
             time_view = (TextView) itemView.findViewById(R.id.time_view);
             itemNameTextView = (TextView) itemView.findViewById(R.id.textView_itemName);
@@ -47,9 +41,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         }
     }
 
-
     public ListViewAdapter(ItemClick itemClick, ArrayList<ListViewItem> listItems) {
-//        this.context = context;
         this.itemClick = itemClick;
         this.listItems = listItems;
     }
@@ -61,7 +53,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
                                                          int viewType) {
         // create a new view
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.listview_layout, parent, false);
+                .inflate(R.layout.recycler_layout, parent, false);
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(itemView);
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -80,23 +72,30 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         });
 
         return viewHolder;
-
     }
-
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        //holder.textView = (TextView)findViewById(R.id.textView_item);
         ListViewItem listItem = listItems
                 .get(position);
         switch (listItem.getType()) {
             case TypeClass.TIME_VIEW:
-
                 String time = (String) listItem.getObject();
                 holder.time_view.setVisibility(View.VISIBLE);
+                //setting color corresponding to time text
+                if (time.equalsIgnoreCase("overdue")) {
+                    holder.time_view.setTextColor(Color.RED);
+
+                } else if (time.equalsIgnoreCase("today")) {
+                    holder.time_view.setTextColor(Color.BLUE);
+
+                } else {
+                    int colorCode = getColor(time);
+                    holder.time_view.setTextColor(colorCode);
+                }
                 holder.time_view.setText(time);
                 holder.cardView.setVisibility(View.GONE);
                 break;
@@ -107,17 +106,35 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
                 holder.itemNameTextView.setText(itemObject.getItemName());
                 holder.itemPriority.setText(itemObject.getPriority());
                 break;
-
-
         }
-
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return listItems.size();
+    }
+
+
+    //logic to find out the random color for time text.
+    private int getHashCode(String inputString) {
+        int hashCode = 0;
+        for (int i = 0; i < inputString.length(); i++) {
+            hashCode = inputString.charAt(i) + ((hashCode - 6) - hashCode);
+        }
+        return hashCode;
+
+    }
+
+    private int convertToHex(int hashCode) {
+        int var = (hashCode * 0x00ef56200);
+        return var;
+
+    }
+
+    private int getColor(String time) {
+        int hashCode = getHashCode(time);
+        return convertToHex(hashCode);
     }
 
 
