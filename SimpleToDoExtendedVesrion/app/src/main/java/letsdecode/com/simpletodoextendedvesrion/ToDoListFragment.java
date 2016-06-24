@@ -2,10 +2,10 @@ package letsdecode.com.simpletodoextendedvesrion;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.usage.NetworkStats;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import letsdecode.com.simpletodoextendedvesrion.bucket.ItemsBucketing;
 
@@ -73,6 +72,19 @@ public class ToDoListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("SimpleToDoExtendedVersion");
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override

@@ -17,7 +17,6 @@ public class ItemListActivity extends AppCompatActivity implements ToDoListFragm
         //Set Action bar icon and show that
         getSupportActionBar().setIcon(R.drawable.check);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setTitle("Edit Task");
 
 
 
@@ -37,10 +36,7 @@ public class ItemListActivity extends AppCompatActivity implements ToDoListFragm
         super.onResume();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
+
 
     @Override
     protected void onResumeFragments() {

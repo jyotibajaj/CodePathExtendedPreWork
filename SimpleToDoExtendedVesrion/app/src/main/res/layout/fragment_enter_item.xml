@@ -4,20 +4,14 @@
     android:layout_height="match_parent"
     tools:context=".AddItemFragment">
 
-    <ImageButton
-        android:id="@+id/imageButton_trash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/trash_35" />
+
 
 
     <TextView
         android:id="@+id/textView_taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="40dp"
         android:text="Task Name" />
 
@@ -26,13 +20,25 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView_taskName"
-        android:layout_toRightOf="@+id/textView_taskName" />
+        android:background="@drawable/edit_text_border"
+        android:layout_toRightOf="@+id/textView_taskName"
+        android:layout_marginLeft="5dp"/>
+
+    <TextView
+        android:id="@+id/textView_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_taskName"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="32dp"
+        android:text="Due Date" />
 
     <DatePicker
         android:id="@+id/date_picker"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText_taskName"
+        android:layout_toRightOf="@id/textView_due_date"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"></DatePicker>
 
@@ -41,66 +47,78 @@
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date_picker"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginLeft="5dp"
         android:text="Priority" />
 
 
     <RadioGroup
-        android:layout_width="wrap_content"
+        android:id="@+id/radiogroup"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView_priority"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/button_low"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/color_change_b"
             android:button="@null"
+            android:gravity="center"
             android:text="Low" />
 
         <RadioButton
             android:id="@+id/button_med"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/color_change_b"
             android:button="@null"
             android:text="Medium" />
 
         <RadioButton
             android:id="@+id/button_high"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/color_change_b"
+            android:gravity="center"
             android:button="@null"
-            android:text="high" />
+            android:text="High" />
 
         <RadioButton
             android:id="@+id/button_urgent"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
             android:background="@drawable/color_change_b"
             android:button="@null"
-            android:text="urgent" />
+            android:text="Urgent" />
 
     </RadioGroup>
 
-    <ImageButton
+    <Button
         android:id="@+id/button_addItem"
         android:layout_width="80dp"
-        android:layout_height="30dp"
-        android:layout_below="@+id/textView_priority"
-
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radiogroup"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_send_black_24dp"
-        android:text="submit" />
+        android:textColor="#00b200"
+        android:text="Submit" />
+    <Button
+        android:id="@+id/button_trash"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_addItem"
+        android:layout_centerHorizontal="true"
+        android:text="DELETE"
+        android:gravity="center"
+        android:textColor="#ff0000"
+        />
 
 
 </RelativeLayout>

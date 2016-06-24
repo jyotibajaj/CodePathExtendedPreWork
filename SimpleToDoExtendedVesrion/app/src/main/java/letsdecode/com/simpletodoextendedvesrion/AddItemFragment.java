@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,8 +29,7 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class AddItemFragment extends Fragment {
-    private Button lowButton, mediumButton, highButton, urgentButton;
-    private ImageButton trashButton, addButton;
+    private Button lowButton, mediumButton, highButton, urgentButton,trashButton,addButton;
 
 
     public static final String EDIT_KEY = "edit";
@@ -75,7 +73,6 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         sqLiteDataAdapter = new SQLiteDataAdapter(getActivity().getApplicationContext());
@@ -83,26 +80,27 @@ public class AddItemFragment extends Fragment {
 
         editMode = (Boolean) bundle.get(EDIT_KEY);
         if (editMode) {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Edit Task");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Task");
         } else {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Add Task");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Add Task");
         }
         setHasOptionsMenu(true);
 
     }
 
-        @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                    getActivity().onBackPressed();
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
+        switch (item.getItemId()) {
+            case android.R.id.home:
 
+                getActivity().onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+
+    }
+
     private void initPageWith(Item item) {
         taskNameEdit.setText(item.getItemName());
         Calendar now = Calendar.getInstance();
@@ -125,6 +123,18 @@ public class AddItemFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -138,11 +148,6 @@ public class AddItemFragment extends Fragment {
         }
     }
 
-    //taking reference of buttons and edit texts.
-    //onclick event of add button
-       /*
-       getting text from edit texts and inserting into data base.
-        */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -152,8 +157,8 @@ public class AddItemFragment extends Fragment {
         mediumButton = (Button) view.findViewById(R.id.button_med);
         highButton = (Button) view.findViewById(R.id.button_high);
         urgentButton = (Button) view.findViewById(R.id.button_urgent);
-        addButton = (ImageButton) view.findViewById(R.id.button_addItem);
-        trashButton = (ImageButton) view.findViewById(R.id.imageButton_trash);
+        addButton = (Button) view.findViewById(R.id.button_addItem);
+        trashButton = (Button) view.findViewById(R.id.button_trash);
         trashButton.setVisibility(View.INVISIBLE);
         //edit texts reference
         taskNameEdit = (EditText) view.findViewById(R.id.editText_taskName);
@@ -282,37 +287,6 @@ public class AddItemFragment extends Fragment {
 
     }
 
-
-    private void buttonClicked(View v) {
-        int id = v.getId();
-        switch (id) {
-            case 1:
-                id = R.id.button_low;
-                priority = lowButton.getText().toString();
-                break;
-
-            case 2:
-                id = R.id.button_med;
-                priority = mediumButton.getText().toString();
-                break;
-
-            case 3:
-                id = R.id.button_high;
-                priority = highButton.getText().toString();
-                break;
-
-            case 5:
-                id = R.id.button_urgent;
-                priority = urgentButton.getText().toString();
-                break;
-
-
-        }
-
-
-    }
-
-
     private void reset() {
         lowButton.setPressed(false);
         mediumButton.setPressed(false);
@@ -337,16 +311,6 @@ public class AddItemFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
