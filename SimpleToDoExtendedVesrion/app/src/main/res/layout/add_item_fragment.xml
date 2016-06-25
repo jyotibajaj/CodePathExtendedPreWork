@@ -16,7 +16,8 @@
             android:id="@+id/editText_taskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/taskNameHint" />
+            android:hint="@string/taskNameHint"
+            android:inputType="textCapSentences" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -113,7 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="30dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
         android:text="@string/removeButtonText"

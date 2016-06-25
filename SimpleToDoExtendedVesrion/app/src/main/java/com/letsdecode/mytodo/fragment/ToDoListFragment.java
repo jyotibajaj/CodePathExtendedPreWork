@@ -109,7 +109,7 @@ public class ToDoListFragment extends Fragment implements ListViewAdapter.ItemCl
         ArrayList<TaskDetail> itemList = sqLiteDataAdapterNotPurchased.getToDoItemData();
         ItemsBucketing itemsBucketing = new ItemsBucketing();
         listItems = itemsBucketing.createBuckets(itemList);
-        mAdapter = new ListViewAdapter(this, listItems);
+        mAdapter = new ListViewAdapter(this, listItems, getActivity());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -120,6 +120,18 @@ public class ToDoListFragment extends Fragment implements ListViewAdapter.ItemCl
         FragmentTransaction fragmentTransaction3 = getFragmentManager().beginTransaction();
         fragmentTransaction3.replace(R.id.fragment_container, AddItemFragment.newInstance(item_id, true))
                 .addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onItemDone(TaskDetail taskDetail) {
+        item_id = taskDetail.getId();
+        SQLiteDataAdapter.setItemDone(""+item_id);
+    }
+
+    @Override
+    public void onItemNotDone(TaskDetail taskDetail) {
+        item_id = taskDetail.getId();
+        SQLiteDataAdapter.setItemNotDone(""+item_id);
     }
 
     public interface OnFragmentInteractionListener {

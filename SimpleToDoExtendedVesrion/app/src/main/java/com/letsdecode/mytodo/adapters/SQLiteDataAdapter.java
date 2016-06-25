@@ -44,6 +44,22 @@ public class SQLiteDataAdapter {
         dbObject.update(SQLiteDataBaseHelper.TABLE_ITEM, contentValues, "item_id=?", new String[]{"" + id});
     }
 
+    public static void setItemDone(String id) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLiteDataBaseHelper.STATUS, "done");
+        SQLiteDatabase dbObject;
+        dbObject = sqLiteDataBaseHelper.getWritableDatabase();
+        dbObject.update(SQLiteDataBaseHelper.TABLE_ITEM, contentValues, "item_id=?", new String[]{"" + id});
+    }
+
+    public static void setItemNotDone(String id) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLiteDataBaseHelper.STATUS, "todo");
+        SQLiteDatabase dbObject;
+        dbObject = sqLiteDataBaseHelper.getWritableDatabase();
+        dbObject.update(SQLiteDataBaseHelper.TABLE_ITEM, contentValues, "item_id=?", new String[]{"" + id});
+    }
+
     //method to insert data(item name and quantity) from input box to data box
     public static boolean deleteItemData(int id) {
         String[] columns = {sqLiteDataBaseHelper.UID, sqLiteDataBaseHelper.TASK_NAME, SQLiteDataBaseHelper.DUE_DATE, sqLiteDataBaseHelper.PRIORITY, sqLiteDataBaseHelper.STATUS};
@@ -78,7 +94,7 @@ public class SQLiteDataAdapter {
         /* return cursor type object and this cursor object contains the subset of table containing the result.
         cursor is used to retrieve data and we use query method of SQliteDatabase
          */
-        Cursor cursor = dbObject.query(sqLiteDataBaseHelper.TABLE_ITEM, columns, "status=?", new String[]{"todo"}, null, null, null);
+        Cursor cursor = dbObject.query(sqLiteDataBaseHelper.TABLE_ITEM, columns, null, null, null, null, null);
         ArrayList<TaskDetail> itemArrayList = new ArrayList<TaskDetail>();
         // when reach end of the statement moveNxt will return false and execution of loop stops.
         //cursor steps up row wise, it complete one row and then moves to next.

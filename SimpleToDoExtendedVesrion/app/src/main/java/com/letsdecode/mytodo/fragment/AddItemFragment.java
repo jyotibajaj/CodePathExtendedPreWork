@@ -24,6 +24,7 @@ import com.letsdecode.mytodo.models.TaskDetail;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import letsdecode.com.simpletodoextendedvesrion.R;
 
@@ -49,7 +50,7 @@ public class AddItemFragment extends Fragment {
     TextInputLayout date;
     private boolean editMode = false;
     private String idItem = null;
-    String priority = "low";
+    String priority = "Low";
     EditText editText_duedate;
     Calendar calendar;
     TaskDetail item = null;
@@ -176,8 +177,10 @@ public class AddItemFragment extends Fragment {
         editText_duedate.setOnClickListener(editDateClickListener);
 
         if (editMode == false) {
-            calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR, 23);
+
+            calendar = Calendar.getInstance(Locale.getDefault());
+            calendar.set(Calendar.HOUR, 11);
+            calendar.set(Calendar.AM_PM, Calendar.PM);
             calendar.set(Calendar.MINUTE, 59);
             calendar.set(Calendar.SECOND, 59);
             editText_duedate.setText(simpleDateFormat.format(calendar.getTime()));
@@ -239,7 +242,7 @@ public class AddItemFragment extends Fragment {
         lowButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                priority = "low";
+                priority = "Low";
                 lowButton.setChecked(true);
                 return true;
             }
@@ -248,7 +251,7 @@ public class AddItemFragment extends Fragment {
         mediumButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                priority = "medium";
+                priority = "Medium";
                 mediumButton.setChecked(true);
                 return true;
             }
@@ -257,7 +260,7 @@ public class AddItemFragment extends Fragment {
         highButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                priority = "high";
+                priority = "High";
                 highButton.setChecked(true);
                 return true;
             }
@@ -267,7 +270,7 @@ public class AddItemFragment extends Fragment {
         urgentButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                priority = "urgent";
+                priority = "Urgent";
                 urgentButton.setChecked(true);
                 return true;
             }
@@ -310,11 +313,12 @@ public class AddItemFragment extends Fragment {
     private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker arg0, int year, int month, int dayOfMonth) {
-            calendar = Calendar.getInstance();
+            calendar = Calendar.getInstance(Locale.getDefault());
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            calendar.set(Calendar.HOUR, 23);
+            calendar.set(Calendar.HOUR, 11);
+            calendar.set(Calendar.AM_PM, Calendar.PM);
             calendar.set(Calendar.MINUTE, 59);
             calendar.set(Calendar.SECOND, 59);
             editText_duedate.setText(simpleDateFormat.format(calendar.getTime()));
@@ -324,9 +328,8 @@ public class AddItemFragment extends Fragment {
     View.OnClickListener editDateClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
             int year = calendar.get(Calendar.YEAR);
-
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             new DatePickerDialog(AddItemFragment.this.getActivity(), myDateListener, year, month, day).show();

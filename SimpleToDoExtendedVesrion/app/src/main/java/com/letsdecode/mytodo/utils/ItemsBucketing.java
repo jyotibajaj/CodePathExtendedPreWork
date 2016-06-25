@@ -67,24 +67,35 @@ public class ItemsBucketing {
             Calendar taskTime = Calendar.getInstance();
             Date itemDate = new Date(Long.valueOf(i.getTime()));
             taskTime.setTime(itemDate);
-            if (taskTime.get(Calendar.YEAR) - now.get(Calendar.YEAR) > 1) {
+            if (Long.valueOf(i.getTime()) < currentTime) {
+                //Task time is  less than current time;
+                key = Keys.OVERDUE;
+            } else if (taskTime.get(Calendar.YEAR) - now.get(Calendar.YEAR) > 1) {
+                //Task time is more 1 year ahead of now
                 key = Keys.SOME_DAY;
             } else if (taskTime.get(Calendar.YEAR) - now.get(Calendar.YEAR) == 1) {
+                //Task time year is next year
                 key = Keys.NEXT_YEAR;
             } else if (taskTime.get(Calendar.YEAR) - now.get(Calendar.YEAR) == 0) {
+                //Same Year; Lets check which month, week, or day
                 key = Keys.THIS_YEAR;
                 if (taskTime.get(Calendar.MONTH) - now.get(Calendar.MONTH) > 1) {
+                    //Any month after next month
                     key = values[Keys.JANUARY.ordinal() + taskTime.get(Calendar.MONTH)];
                 } else if (taskTime.get(Calendar.MONTH)
                         - now.get(Calendar.MONTH) == 1) {
+                    //Next Month
                     key = Keys.NEXT_MONTH;
                 } else if (taskTime.get(Calendar.MONTH)
                         - now.get(Calendar.MONTH) == 0) {
+                    //This month
                     if (taskTime.get(Calendar.WEEK_OF_MONTH)
                             - now.get(Calendar.WEEK_OF_MONTH) > 1) {
+                        //Next to next week
                         key = Keys.THIS_MONTH;
                     } else if (taskTime.get(Calendar.WEEK_OF_MONTH)
                             - now.get(Calendar.WEEK_OF_MONTH) == 1) {
+                        //Next week ;
                         key = Keys.NEXT_WEEK;
                     } else if (taskTime.get(Calendar.WEEK_OF_MONTH)
                             - now.get(Calendar.WEEK_OF_MONTH) == 0) {

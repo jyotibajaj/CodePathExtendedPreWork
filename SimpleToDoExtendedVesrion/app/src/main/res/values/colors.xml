@@ -8,7 +8,12 @@
     <color name="colorHigh">#FF9800</color>
     <color name="colorUrgent">#F44336</color>
     <color name="colorDelete">#d96060</color>
+    <color name="colorBackground">#ACFFFFFF</color>
+    <color name="colorWhite">#ffffffff</color>
     <color name="timeTextOverdue">#ff0000</color>
+    <color name="itemNameColor">#000000</color>
+    <color name="cardColor">#ffffff</color>
+
 
 
 </resources>

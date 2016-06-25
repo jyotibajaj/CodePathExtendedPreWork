@@ -10,7 +10,7 @@
     <string name="highButtonText">High</string>
     <string name="urgentButtonText">Urgent</string>
     <string name="submitButtonText">Submit</string>
-    <string name="removeButtonText">Remove</string>
+    <string name="removeButtonText">REMOVE</string>
 
 </resources>
 
